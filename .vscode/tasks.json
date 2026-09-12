@@ -1,0 +1,37 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "sqlproj: Build Entrar",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"d:/Almacenamiento/OneDrive - INSTITUTO TECNOLOGICO METROPOLITANO - ITM/CosasITM/Septimo Semestre/Aplicaciones y servicios web/golbet_appservicios_j/Entrar/Entrar.sqlproj"
+			],
+			"problemMatcher": "$sqlproj-problem-matcher",
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Compile el proyecto Entrar de SQL"
+		},
+		{
+			"label": "sqlproj: Build GolBetDB_AppServices_J",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"d:/Almacenamiento/OneDrive - INSTITUTO TECNOLOGICO METROPOLITANO - ITM/CosasITM/Septimo Semestre/Aplicaciones y servicios web/golbet_appservicios_j/GolBetDB_AppServices_J/GolBetDB_AppServices_J.sqlproj"
+			],
+			"problemMatcher": "$sqlproj-problem-matcher",
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Compile el proyecto GolBetDB_AppServices_J de SQL"
+		}
+	]
+}
