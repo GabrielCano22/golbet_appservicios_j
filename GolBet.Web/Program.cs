@@ -5,10 +5,22 @@ using GolBet.Services.Implementations;
 using GolBet.Services.Interfaces;
 using GolBet.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using GolBet.Web.ModelBinding;
+
+var culture = new CultureInfo("es-CO");
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
 
 var builder = WebApplication.CreateBuilder(args);   
 
-builder.Services.AddControllersWithViews();  
+builder.Services.AddControllersWithViews(options =>
+{
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+    options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "Este campo es obligatorio.");
+    options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor((_, field) => $"El valor de {field} no es válido.");
+    options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(field => $"{field} debe ser un número.");
+});
 
 //Este es el nuevo código  
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -18,6 +30,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<ITeamService, TeamService>();
 
 var app = builder.Build();
 
