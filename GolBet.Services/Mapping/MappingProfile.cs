@@ -9,6 +9,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap<Team, TeamDto>();
+        CreateMap<TeamFormDto, Team>().ReverseMap();
+        CreateMap<MatchFormDto, Match>().ReverseMap();
         CreateMap<Match, MatchDto>();
         CreateMap<Match, MatchDetailDto>()
             .ForMember(dto => dto.TotalBets,
