@@ -28,11 +28,14 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Matches" asp-action="Index">Partidos</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Teams" asp-action="Index">Equipos</a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Teams" asp-action="Index">Equipos</a>
+                            </li>
+                        }
                     </ul>
-                    <!-- Aquí irá la sesión (Módulo 7) -->
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
