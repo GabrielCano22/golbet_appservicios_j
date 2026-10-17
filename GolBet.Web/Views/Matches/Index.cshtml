@@ -3,6 +3,8 @@
 @model IEnumerable<GolBet.Services.DTOs.MatchDto>
 @{
     ViewData["Title"] = "Partidos";
+    var current = (MatchStatus?)ViewBag.CurrentStatus;
+    var search = (string?)ViewBag.CurrentSearch;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -13,27 +15,51 @@
     }
 </div>
 
-@{
-    var current = (MatchStatus?)ViewBag.CurrentStatus;
-}
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="input-group">
+        <input type="search" id="search" name="search" value="@search"
+               class="form-control" placeholder="Buscar por equipo" />
+        <button type="submit" class="btn btn-success">Buscar</button>
+    </div>
+    @if (current.HasValue)
+    {
+        <input type="hidden" name="status" value="@current" />
+    }
+</form>
+
 <div class="d-flex gap-2 flex-wrap mb-4">
-    <a asp-action="Index"
+    <a asp-action="Index" asp-route-search="@search"
        class="btn btn-sm @(current is null ? "btn-success" : "btn-outline-success")">
         Todos
     </a>
-    <a asp-action="Index" asp-route-status="@MatchStatus.Scheduled"
+    <a asp-action="Index" asp-route-status="@MatchStatus.Scheduled" asp-route-search="@search"
        class="btn btn-sm @(current == MatchStatus.Scheduled ? "btn-success" : "btn-outline-success")">
         Programados
     </a>
-    <a asp-action="Index" asp-route-status="@MatchStatus.InProgress"
+    <a asp-action="Index" asp-route-status="@MatchStatus.InProgress" asp-route-search="@search"
        class="btn btn-sm @(current == MatchStatus.InProgress ? "btn-success" : "btn-outline-success")">
         En juego
     </a>
-    <a asp-action="Index" asp-route-status="@MatchStatus.Finished"
+    <a asp-action="Index" asp-route-status="@MatchStatus.Finished" asp-route-search="@search"
        class="btn btn-sm @(current == MatchStatus.Finished ? "btn-success" : "btn-outline-success")">
         Finalizados
     </a>
 </div>
+
+@if (!Model.Any())
+{
+    <div class="text-center text-muted py-4">
+        @if (!string.IsNullOrWhiteSpace(search))
+        {
+            <p class="mb-2">No hay partidos para «@search»</p>
+        }
+        else
+        {
+            <p class="mb-2">No hay partidos con los filtros seleccionados.</p>
+        }
+        <a asp-action="Index" class="btn btn-sm btn-secondary">Volver a la cartelera de partidos</a>
+    </div>
+}
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
 @foreach (var match in Model)
