@@ -79,7 +79,7 @@
                 </div>
             </div>
         </div>
-        @if (Model.Status == MatchStatus.Scheduled)
+        @if (Model.Status == MatchStatus.Scheduled && Model.Date > DateTime.Now)
         {
             @if (User.IsInRole("Apostador"))
             {

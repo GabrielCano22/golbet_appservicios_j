@@ -111,7 +111,7 @@ public static class DbSeeder
         await context.SaveChangesAsync();
     }
 
-    // ---- Identity data: roles and admin user (Module 7) ----
+    // ---- Identity data: roles and default users (Module 7) ----
     private static async Task SeedIdentityAsync(
         RoleManager<IdentityRole> roleManager,
         UserManager<AppUser> userManager)
@@ -137,6 +137,22 @@ public static class DbSeeder
 
             await userManager.CreateAsync(admin, "Admin123*");
             await userManager.AddToRoleAsync(admin, AdminRole);
+        }
+
+        // Bettor user (idempotent)
+        if (await userManager.FindByEmailAsync("bettor@golbet.com") is null)
+        {
+            var bettor = new AppUser
+            {
+                UserName = "bettor@golbet.com",
+                Email = "bettor@golbet.com",
+                FullName = "Apostador GolBet",
+                Balance = 100_000m,
+                EmailConfirmed = true
+            };
+
+            await userManager.CreateAsync(bettor, "Bettor123*");
+            await userManager.AddToRoleAsync(bettor, BettorRole);
         }
     }
 }
